@@ -1,49 +1,68 @@
-# 🌱 goGreen 
+# goGreen
 
-With **goGreen**, you can make your profile look like you've been hard at work... even if you haven't. 
-NodeJs script to make commits to the past (or the future) to go green on GitHub.
+goGreen is a Node.js CLI for planning or creating Git commits with custom contribution dates.
 
-## About
+The command is safe by default: it prints a dry run unless you pass `--execute`. It only pushes to a remote when you also pass `--push`.
 
-**goGreen** helps you create commits on your GitHub profile for any date in the past. Whether you want to fill up your contribution graph or even make cool patterns and artwork.
+## Requirements
 
-## Getting Started
+- Node.js 20 or newer
+- Git configured with the author identity you want on the commits
 
-Follow these steps to bring your contribution graph to life:
+## Install
 
-1. **Clone this repository**
 ```bash
 git clone https://github.com/fenrir2608/goGreen.git
 cd goGreen
+npm install
 ```
-3. **Set up your project**
-Initialize a new Node.js project:
+
+## Usage
+
+Preview 200 commits without changing the repository:
+
 ```bash
-npm init -y
-  ```
-3. **Install the required npm modules**
-You'll need a few modules to get everything running smoothly. Install them all with:
-  ```bash
-  npm install moment simple-git random
-  ```
-4. **Create your commit script**
-- Create a JavaScript file to manage your commits.
-- Create a JSON file to store all the commit timestamp data.
+npm start -- --count 200 --seed 42
+```
 
-## Room for Improvement
+Create 200 local commits across the default date range:
 
-So, you've got the basics down. What's next?
+```bash
+npm start -- --count 200 --execute
+```
 
-- **Custom Patterns:** Experiment with different patterns on your contribution graph. Maybe spell out your name or create some cool designs.
-- **Density Control:** Play around with the number of commits per day to adjust the shades of green.
-- **Input Strings:** Convert input strings to X-Y mapped contributions.
+Create and push 200 commits:
 
-## npm Modules Used
+```bash
+npm start -- --count 200 --execute --push
+```
 
-- [`moment`](https://www.npmjs.com/package/moment) - Handles date and time manipulation.
-- [`simple-git`](https://www.npmjs.com/package/simple-git) - For easy Git commands.
-- [`random`](https://www.npmjs.com/package/random) - To generate random numbers for the commits.
+Create commits in a specific date range:
 
-## Credits
+```bash
+npm start -- --count 200 --from 2025-01-01 --to 2025-12-31 --execute
+```
 
-Huge thanks to [Akshay Saini](https://github.com/akshaymarch7) for the original video behind this project.
+## Options
+
+| Option | Description |
+| --- | --- |
+| `-c, --count <number>` | Number of commits to plan or create. Defaults to `100`. |
+| `--from <YYYY-MM-DD>` | First eligible contribution date. Defaults to one year ago. |
+| `--to <YYYY-MM-DD>` | Last eligible contribution date. Defaults to today. |
+| `-f, --file <path>` | JSON file updated for each commit. Defaults to `data.json`. |
+| `-m, --message <template>` | Commit message template. Supports `{index}`, `{count}`, and `{date}`. |
+| `--seed <number>` | Makes the generated date sequence repeatable. |
+| `--execute` | Creates local commits instead of printing a dry run. |
+| `--push` | Pushes after creating commits. Requires `--execute`. |
+| `-h, --help` | Prints CLI help. |
+
+## Test
+
+```bash
+npm test
+```
+
+## Notes
+
+Backdated commits affect repository history. Run the command from a repository where you are comfortable creating those commits, and review the dry-run output before using `--execute`.
